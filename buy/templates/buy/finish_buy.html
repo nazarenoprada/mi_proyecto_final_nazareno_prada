@@ -1,0 +1,19 @@
+{% extends "base.html" %}
+
+{% block content %}
+<div class="flex flex-col items-center justify-center min-h-screen bg-gray-100 p-4">
+    <div class="bg-white rounded-lg shadow-xl p-8 max-w-lg w-full flex flex-col items-center text-center">
+        <!-- Ícono de checkmark SVG -->
+        <svg class="mx-auto text-green-500 w-2 h-2 mb-4" fill="currentColor" viewBox="0 0 20 20" xmlns="http://www.w3.org/2000/svg">
+            <path fill-rule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zm3.707-9.293a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z" clip-rule="evenodd"></path>
+        </svg>
+
+        <h2 class="text-5xl font-bold text-gray-800 mb-2">¡Felicidades!</h2>
+        <p class="text-2xl text-gray-600 mb-6">Tu compra ha sido realizada con éxito.</p>
+        
+        <a href="{% url 'home' %}" class="inline-block bg-blue-500 text-white font-bold py-3 px-8 rounded-lg hover:bg-blue-600 transition duration-300">
+            Volver al inicio
+        </a>
+    </div>
+</div>
+{% endblock %}

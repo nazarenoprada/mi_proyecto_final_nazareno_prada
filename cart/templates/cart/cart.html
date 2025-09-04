@@ -1,0 +1,112 @@
+{% extends 'base.html' %}
+{% load humanize %}
+
+{% block title %}Carrito{% endblock %}
+
+{% block content %}
+<div class="container mx-auto p-4 font-sans">
+    <div class="flex flex-col lg:flex-row gap-6">
+
+        {% if productos_carrito %}
+            <div class="lg:w-2/3 space-y-4" id="product-list">
+                {% for producto in productos_carrito %}
+                <div class="bg-white rounded-lg shadow-md p-4 flex items-center gap-4 flex-wrap sm:flex-nowrap product-card" data-price="{{ producto.producto.precio }}">
+                    <img src="{{ producto.producto.imagen.url }}" alt="{{ producto.producto.nombre }}" class="w-20 h-20 object-cover rounded-lg">
+                    <div class="flex-grow">
+                        <h3 class="font-semibold text-lg">{{ producto.producto.nombre }}</h3>
+                        <p class="text-gray-500">{{ producto.producto.descripcion }}</p>
+                        <p class="font-bold text-xl text-blue-600 mt-2 price" data-raw-price="{{ producto.producto.precio }}">${{ producto.producto.precio|intcomma }}</p>
+                    </div>
+                    <div class="flex flex-col items-center gap-2 mt-4 sm:mt-0">
+                        <button class="text-red-500 hover:text-red-700 transition duration-300 delete-btn">
+                            <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16" />
+                            </svg>
+                            Eliminar
+                        </button>
+                        <div class="flex items-center border rounded-full">
+                            <button class="minus-btn px-3 py-1 text-gray-600 hover:bg-gray-100 rounded-l-full transition duration-300">-</button>
+                            <span class="quantity px-4 py-1 text-lg">{{ producto.cantidad }}</span>
+                            <button class="plus-btn px-3 py-1 text-gray-600 hover:bg-gray-100 rounded-r-full transition duration-300">+</button>
+                        </div>
+                    </div>
+                </div>
+                {% endfor %}
+            </div>
+        {% else %}
+            <div class="w-full text-center p-12 bg-gray-100 rounded-lg shadow-inner">
+                <p class="text-3xl font-bold text-gray-700 mb-4">Tu carrito está vacío</p>
+                <p class="text-gray-500 mb-8">Cuando agregues un producto, podrás verlo aquí.</p>
+                <a href="{% url 'productos:lista_productos' %}" class="inline-block bg-red-600 text-white font-bold py-3 px-8 rounded-lg hover:bg-red-700 transition duration-300 shadow-md">
+                    Ver productos
+                </a>
+            </div>
+        {% endif %}
+        
+        <div class="lg:w-1/3 p-6 bg-white rounded-lg shadow-md h-fit">
+            <h2 class="text-2xl font-bold mb-4">RESUMEN</h2>
+            <div class="flex justify-between items-center mb-2">
+                <p class="text-gray-600"><span id="item-count">0</span> productos</p>
+                <p class="font-bold text-lg" id="subtotal">$0</p>
+            </div>
+            <hr class="my-4">
+            <div class="flex justify-between items-center font-bold text-xl mb-4">
+                <p>Total</p>
+                <p id="total">$0</p>
+            </div>
+            <a href="{% url 'buy:buy' %}" class="w-full block text-center bg-red-600 text-white font-bold py-3 rounded-lg hover:bg-red-700 transition duration-300 mb-2">Iniciar compra</a>
+            <a href="{% url 'productos:lista_productos' %}" class="w-full block text-center bg-transparent text-red-600 font-bold py-3 rounded-lg border-2 border-red-600 hover:bg-red-50 transition duration-300">Ver más productos</a>
+        </div>
+    </div>
+</div>
+
+<script>
+    document.addEventListener('DOMContentLoaded', () => {
+        const productList = document.getElementById('product-list');
+        
+        function updateAllTotals() {
+            let totalItems = 0;
+            let subtotal = 0;
+
+            const productCards = document.querySelectorAll('.product-card');
+            productCards.forEach(card => {
+                const quantity = parseInt(card.querySelector('.quantity').textContent);
+                const price = parseInt(card.dataset.price);
+                totalItems += quantity;
+                subtotal += quantity * price;
+            });
+            
+            document.getElementById('item-count').textContent = totalItems;
+            document.getElementById('subtotal').textContent = `$${subtotal.toLocaleString('es-ES')}`;
+            document.getElementById('total').textContent = `$${subtotal.toLocaleString('es-ES')}`;
+        }
+        
+        if (productList) {
+            productList.addEventListener('click', (event) => {
+                const card = event.target.closest('.product-card');
+                if (!card) return;
+
+                const quantitySpan = card.querySelector('.quantity');
+                let currentQuantity = parseInt(quantitySpan.textContent);
+
+                if (event.target.classList.contains('plus-btn')) {
+                    currentQuantity++;
+                    quantitySpan.textContent = currentQuantity;
+                    updateAllTotals();
+                } else if (event.target.classList.contains('minus-btn')) {
+                    if (currentQuantity > 1) {
+                        currentQuantity--;
+                        quantitySpan.textContent = currentQuantity;
+                        updateAllTotals();
+                    }
+                } else if (event.target.closest('.delete-btn')) {
+                    card.remove();
+                    updateAllTotals();
+                }
+            });
+        }
+        
+        updateAllTotals();
+    });
+</script>
+{% endblock %}

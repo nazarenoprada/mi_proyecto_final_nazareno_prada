@@ -1,0 +1,26 @@
+{% extends "base.html" %}
+
+{% block content %}
+    <div class="profile-container">
+        <h2>Mi Perfil</h2>
+        <div class="profile-details">
+            <div class="profile-picture">
+                <img src="" alt="Avatar">
+            </div>
+            <div class="profile-info">
+                <h3>Nombre de Usuario: {{ user.username }}</h3>
+                <p>Email: {{ user.email }}</p>
+            </div>
+        </div>
+
+        <div class="profile-edit">
+            <h3>Editar Perfil</h3>
+            <form method="POST" enctype="multipart/form-data">
+                {% csrf_token %}
+                {{ form.as_p }}
+                <button type="submit">Guardar Cambios</button>
+            </form>
+            <a href="{% url 'change_password' %}">Cambiar Contraseña</a>
+        </div>
+    </div>
+{% endblock %}

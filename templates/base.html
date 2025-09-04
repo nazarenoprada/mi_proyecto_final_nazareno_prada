@@ -1,0 +1,70 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>{% block title %}Mi Tienda Online{% endblock %}</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            margin: 0;
+            padding: 0;
+        }
+        .navbar {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 1rem 2rem;
+            background-color: #333;
+            color: white;
+        }
+        .navbar a {
+            color: white;
+            text-decoration: none;
+            margin: 0 1rem;
+            font-weight: bold;
+        }
+        .navbar .logo {
+            font-size: 1.5rem;
+        }
+        .navbar .nav-links a:hover,
+        .navbar .user-actions a:hover {
+            color: #ddd;
+        }
+        .navbar .user-actions a {
+            margin-left: 1rem;
+        }
+        .content {
+            padding: 2rem;
+        }
+    </style>
+</head>
+<body>
+
+    <nav class="navbar">
+        <a href="{% url 'home' %}" class="logo">Mi Logo</a>
+        
+        <div class="nav-links">
+            <a href="{% url 'productos:lista_productos' %}">Productos</a>
+            <a href="{% url 'acerca_de_mi' %}">Acerca de mí</a>
+        </div>
+
+        <div class="user-actions">
+            {% if user.is_authenticated %}
+                <a href="{% url 'profile' %}">{{ user.username }}</a>
+                <a href="{% url 'logout' %}">Cerrar Sesión</a>
+            {% else %}
+                <a href="{% url 'login' %}">Iniciar Sesión</a>
+                <a href="{% url 'register' %}">Registro</a>
+            {% endif %}
+            <a href="{% url 'cart:view_cart' %}">Carrito</a>
+        </div>
+    </nav>
+
+    <div class="content">
+        {% block content %}
+        {% endblock %}
+    </div>
+
+</body>
+</html>
