@@ -59,4 +59,6 @@
 (`*`) En caso de no utilizar entorno virtual omitir este paso  
 (`**`) Este paso se debe repetir tras cada instalacion de paquetes para mantener la informacion actualizada  
 (`***`) No olvidar el punto al final para que les genere el proyecto donde estan parados y no se creen carpetas de mas  
-(`****`) Como veran es muy similar a lo que se hace en los modelos (no es exactamente igual para todo)  
+(`****`) Como veran es muy similar a lo que se hace en los modelos (no es exactamente igual para todo)
+
+Link de demostración sobre las funciones de la web: https://youtu.be/YfWd-ixEe98
